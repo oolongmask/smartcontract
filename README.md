@@ -1,0 +1,2 @@
+# smartcontract
+スマートコントラクトに接続
