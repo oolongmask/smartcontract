@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Pay Per View</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.3.0/dist/web3.min.js"></script>
+</head>
+<body>
+
+<h1>Pay Per View</h1>
+<p>コンテンツを閲覧すると、Ethereumが報酬として支払われます。</p>
+
+<script>
+    // Web3インスタンスの初期化
+    if (typeof web3 !== 'undefined') {
+        web3 = new Web3(web3.currentProvider);
+    } else {
+        alert('MetaMaskをインストールしてください。');
+    }
+
+    // スマートコントラクトのアドレスとABI
+    const contractAddress = '0x0bB9D74E01E7Ae4cb18c21A45cE0df577853DCaE'; // ここに実際のスマートコントラクトアドレスを入力してください
+    const contractABI = [{
+    "constant": false,
+    "inputs": [],
+    "name": "payForViewing",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getTotalSupply",
+    "outputs": [{"name": "", "type": "uint256"}],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  }];
+
+    // スマートコントラクトのインスタンスを作成
+    const contract = new web3.eth.Contract(contractABI, contractAddress);
+
+    // ページ読み込み完了時に関数を実行
+    window.addEventListener('load', function() {
+        web3.eth.getAccounts(function(error, accounts) {
+            if (error) {
+                console.error(error);
+            }
+
+            // payForViewing関数を呼び出す
+            contract.methods.payForViewing().send({ from: accounts[0], value: web3.utils.toWei('0.01', 'ether') })
+            .on('transactionHash', function(hash){
+                console.log('Transaction Hash:', hash);
+            })
+            .on('receipt', function(receipt){
+                console.log('Receipt:', receipt);
+            })
+            .on('error', function(error){
+                console.error('Error:', error);
+            });
+        });
+    });
+</script>
+
+</body>
+</html>
