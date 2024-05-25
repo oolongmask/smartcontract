@@ -1,4 +1,4 @@
-# smartcontract
+# smartcontract (メタマスク等)
 スマートコントラクトに接続
 
 1.【報酬システムの設計】
